@@ -6,18 +6,21 @@
 //import java.sql.ResultSet;
 //import java.sql.Statement;
 //
-//public class DbRead extends DbConn {
+//public class DbRead extends DbConn
+//{
 //    PreparedStatement preparedStatement;
 //    Statement statement;
 //    ResultSet resultSet;
 //    String adminProductNames[];
 //
-//    public DbRead(){
+//    public DbRead()
+//    {
 //
 //    }
 //
 //
-//    public static void main(String argv[]){
+//    public static void main(String argv[])
+//    {
 //
 //    }
 //}

@@ -2,11 +2,14 @@
 //
 //import java.sql.*;
 //
-//public class DbWrite extends DbConn {
+//public class DbWrite extends DbConn
+//{
 //    PreparedStatement preparedStatement;
 //    Statement statement;
 //    String resultString;
-//    public DbWrite(){
+//
+//    public DbWrite()
+//    {
 //        resultString = "NULL";
 //    }
 //
@@ -17,26 +20,31 @@
 //     *
 //     * @param username Username of user
 //     * @param password Password of user
-//     *
 //     * @return NULL
 //     */
-//    public void writeUser(String username, String password) {
+//    public void writeUser(String username, String password)
+//    {
 //        int userExists = checkWhetherUsernameExists(username);
 //        System.out.println(userExists);
-//        if (userExists == 1) {
+//        if (userExists == 1)
+//        {
 //            resultString = "Username already exists";
 //            System.out.println(resultString);
-//        } else if (userExists == -1) {
+//        } else if (userExists == -1)
+//        {
 //            resultString = "Error while performing lookup in database";
 //            System.out.println(resultString);
-//        } else if (userExists == 0) {
-//            try {
+//        } else if (userExists == 0)
+//        {
+//            try
+//            {
 //                this.preparedStatement = this.con.prepareStatement("INSERT INTO User VALUES (null, ?, ?)");
 //                this.preparedStatement.setString(1, username);
 //                this.preparedStatement.setString(2, password);
 //                int outV = this.preparedStatement.executeUpdate();
 //                System.out.println(outV + " users inserted");
-//            } catch (SQLException sqlException) {
+//            } catch (SQLException sqlException)
+//            {
 //                System.out.println("Error while pushing to database");
 //                sqlException.printStackTrace();
 //            }
@@ -46,24 +54,27 @@
 //    /**
 //     * Insert AdminItem Product into database.
 //     *
-//     * @param name Name of Admin item product
+//     * @param name  Name of Admin item product
 //     * @param costp Cost price
 //     * @param sellp Sell price
-//     * @param qty Quantity
-//     * @param type Type of product
+//     * @param qty   Quantity
+//     * @param type  Type of product
 //     */
-//    public void writeAdminItem(String name, int costp, int sellp, int qty, String type){
+//    public void writeAdminItem(String name, int costp, int sellp, int qty, String type)
+//    {
 //        int exists = checkWhetherAdminItemExists(name);
-//        if(exists == 1){
+//        if (exists == 1)
+//        {
 //            resultString = "Product exists in database";
 //            System.out.println(resultString);
-//        }
-//        else if(exists == -1){
+//        } else if (exists == -1)
+//        {
 //            resultString = "Error while performing product lookup in database";
 //            System.out.println(resultString);
-//        }
-//        else if(exists == 0){
-//            try{
+//        } else if (exists == 0)
+//        {
+//            try
+//            {
 //
 //                this.preparedStatement = con.prepareStatement("INSERT INTO AdminItem VALUES (null, ?, ?, ?, ?, ?)");
 //                this.preparedStatement.setString(1, name);
@@ -78,8 +89,8 @@
 //
 //                System.out.println(resultString);
 //
-//            }
-//            catch(java.sql.SQLException sqlException){
+//            } catch (java.sql.SQLException sqlException)
+//            {
 //                resultString = "Error while writing into database";
 //                System.out.println(resultString);
 //                sqlException.printStackTrace();
@@ -87,7 +98,8 @@
 //        }
 //    }
 //
-//    public static void main(String args[]){
+//    public static void main(String args[])
+//    {
 //        DbWrite dbWrite = new DbWrite();
 ////        dbWrite.writeUser("hello", "1234");
 //        int res = dbWrite.checkWhetherAdminItemExists("hello");

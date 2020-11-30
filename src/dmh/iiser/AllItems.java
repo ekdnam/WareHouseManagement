@@ -1,9 +1,10 @@
 package dmh.iiser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // This class contains list of all items belonging to any shop or warehouse
-public class AllItems
+public class AllItems implements Serializable
 {
     private ArrayList<Item> items;
     private int item_count;

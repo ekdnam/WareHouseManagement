@@ -13,6 +13,7 @@ public class Bill
     // This constructor to be used only when actually making/generating a bill
     public Bill(String date)
     {
+        //initialize the date here
         this.date = date;
         this.items = new ArrayList<>();
         this.total = 0;
@@ -58,6 +59,11 @@ public class Bill
             data[i][3] = itData[4];
         }
         return data;
+    }
+
+    public void addItem(Item it)
+    {
+        items.add(it);
     }
 
     // Getters and Setters

@@ -3,7 +3,8 @@
 //import java.sql.*;
 //import java.util.*;
 //
-//public class DbConn {
+//public class DbConn
+//{
 //    Connection con;
 //    String url;
 //    String dbName;
@@ -32,20 +33,22 @@
 ////        }
 ////    }
 //
-//    public DbConn(){
-//        try{
+//    public DbConn()
+//    {
+//        try
+//        {
 //            this.dbName = "WAREHOUSE";
 //            this.url = "jdbc:mysql://localhost:3306/";
 //            this.url += this.dbName;
 //            Class.forName("com.mysql.cj.jdbc.Driver");
 //
 //            this.con = DriverManager.getConnection(url, "root", "mandke");
-//        }
-//        catch(ClassNotFoundException cnfe){
+//        } catch (ClassNotFoundException cnfe)
+//        {
 //            System.out.println("JDBC driver not found. Add MySql Connector Jar to the project structure");
 //            cnfe.printStackTrace();
-//        }
-//        catch(java.sql.SQLException sqlException){
+//        } catch (java.sql.SQLException sqlException)
+//        {
 //            System.out.println("Error while establishing connection to Database. Check username and password");
 //            sqlException.printStackTrace();
 //        }
@@ -63,19 +66,22 @@
 //     *
 //     * <p>exists = -1 if error while performing lookup</p>
 //     */
-//    public int checkWhetherUsernameExists(String username){
+//    public int checkWhetherUsernameExists(String username)
+//    {
 //        int exists = -1;
-//        try{
+//        try
+//        {
 //            this.preparedStatement = con.prepareStatement("SELECT EXISTS(SELECT * FROM User WHERE username = ?)");
 //            this.preparedStatement.setString(1, username);
 //            this.resultSet = this.preparedStatement.executeQuery();
 //
-//            while(this.resultSet.next()){
+//            while (this.resultSet.next())
+//            {
 //                exists = this.resultSet.getInt(1);
 //            }
 //            return exists;
-//        }
-//        catch(SQLException sqlException){
+//        } catch (SQLException sqlException)
+//        {
 //            System.out.println("Error while searching for username in database");
 //            sqlException.printStackTrace();
 //        }
@@ -85,7 +91,6 @@
 //    /**
 //     * A simple function to check whether product exists in database.
 //     *
-//     *
 //     * @param name name of the admin item
 //     * @return whether product exists
 //     *
@@ -94,20 +99,23 @@
 //     * <p>returns 0 if product does not exist</p>
 //     * <p>returns -1 if error while performing lookup</p>
 //     */
-//    public int checkWhetherAdminItemExists(String name){
+//    public int checkWhetherAdminItemExists(String name)
+//    {
 //        int exists = -1;
-//        try{
+//        try
+//        {
 //            this.preparedStatement = con.prepareStatement("SELECT EXISTS(SELECT * FROM AdminItem WHERE name = ?)");
 //            this.preparedStatement.setString(1, name);
 //            // Execute query
 //            this.resultSet = this.preparedStatement.executeQuery();
 //            // Get result
-//            while(this.resultSet.next()){
+//            while (this.resultSet.next())
+//            {
 //                exists = this.resultSet.getInt(1);
 //            }
 //            return exists;
-//        }
-//        catch(SQLException sqlException){
+//        } catch (SQLException sqlException)
+//        {
 //            System.out.println("Error while searching for username in database");
 //            sqlException.printStackTrace();
 //        }

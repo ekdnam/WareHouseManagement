@@ -1,8 +1,12 @@
 package dmh.iiser;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Admin extends User
 {
     private AllItems stock;
+    private Queue<Request> req = new LinkedList<>();
 
     public Admin(String uname, String pass)
     {
@@ -13,7 +17,7 @@ public class Admin extends User
     //Class Methods
     //TODO : implement the below methods (UI implementation here - leave it for the end)
     //Use the helper functions in other classes NO AMBIGUITY / REDUNDANCY
-    public void menu()
+    public void menu(int x, int y)
     {
         //The initial frame after logging in
     }
@@ -43,4 +47,29 @@ public class Admin extends User
         // Serve single request here -handling cases when item not in stock or not enough quantity
     }
 
+    public void addItem(Item it)
+    {
+        stock.addItem(it);
+    }
+
+    // Getter and Setters
+    public void setStock(AllItems stock)
+    {
+        this.stock = new AllItems(stock);
+    }
+
+    public void setReq(Queue<Request> req)
+    {
+        this.req = new LinkedList<>(req);
+    }
+
+    public AllItems getStock()
+    {
+        return this.stock;
+    }
+
+    public Queue<Request> getReq()
+    {
+        return req;
+    }
 }
