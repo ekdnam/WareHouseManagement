@@ -1,7 +1,9 @@
 package dmh.iiser;
 
+import java.io.Serializable;
+
 // This is class for one particular item, be it in shop or warehouse
-public class Item
+public class Item implements Serializable
 {
     private int id;
     private String name;

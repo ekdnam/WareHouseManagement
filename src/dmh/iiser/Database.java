@@ -78,7 +78,7 @@ public class Database
 
     ResultSet allUsers()
     {
-        return exQuery("select * from User");
+        return exQuery("select * from User order by id");
     }
 
     ResultSet adminItems()

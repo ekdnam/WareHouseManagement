@@ -2,96 +2,72 @@ package dmh.iiser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-/**
- * @author HP
- */
-public class MyButton extends javax.swing.JPanel
+class MyButton extends JButton
 {
 
-    private JLabel text_area;
-    private String text;
-
-    public MyButton(String text)
-    {
-        this.text = text;
-        initComponents();
-    }
+    private static final long serialVersionUID = 1L;
+    private Color hoverBackgroundColor;
+    private Color pressedBackgroundColor;
+    public static Color DEFAULT_BG_COLOR = new Color(85, 85, 85);
+    public static Color DEFAULT_SELECTED_BG_COLOR = new Color(50, 50, 50);
 
     public MyButton()
     {
-        this("");
+        this(null);
     }
 
-    private void initComponents()
+    public MyButton(String text)
     {
+        super(text);
+        setFocusPainted(false);
+        setForeground(new Color(220, 220, 220));
+        setHoverBackgroundColor(new Color(50, 50, 50));
+        setPressedBackgroundColor(new Color(0, 0, 0));
+        setBackground(DEFAULT_BG_COLOR);
+        setBorder(BorderFactory.createEmptyBorder());
+        super.setContentAreaFilled(false);
+    }
 
-        text_area = new javax.swing.JLabel();
-
-        text_area.setFont(new java.awt.Font("Courier New", Font.PLAIN, 18));
-        setBackground(new java.awt.Color(105, 105, 105));
-        text_area.setForeground(new Color(238, 238, 238));
-        addMouseListener(new java.awt.event.MouseAdapter()
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+        if (getModel().isPressed())
         {
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
-                formMouseEntered(evt);
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt)
-            {
-                formMouseExited(evt);
-            }
-        });
-        addMouseListener(new MouseListener()
+            g.setColor(pressedBackgroundColor);
+        } else if (getModel().isRollover())
         {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e)
-            {
-                setBackground(new Color(100, 100, 100));
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e)
-            {
-                setBackground(new Color(105, 105, 105));
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e)
-            {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e)
-            {
-
-            }
-        });
-        setLayout(new java.awt.BorderLayout());
-
-        text_area.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        text_area.setText(text);
-        add(text_area, java.awt.BorderLayout.CENTER);
+            g.setColor(hoverBackgroundColor);
+        } else
+        {
+            g.setColor(getBackground());
+        }
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
-    private void formMouseEntered(java.awt.event.MouseEvent evt)
+    @Override
+    public void setContentAreaFilled(boolean b)
     {
-        this.setBackground(new Color(110, 110, 110));
     }
 
-    private void formMouseExited(java.awt.event.MouseEvent evt)
+    public Color getHoverBackgroundColor()
     {
-        this.setBackground(new Color(105, 105, 105));
+        return hoverBackgroundColor;
+    }
+
+    public void setHoverBackgroundColor(Color hoverBackgroundColor)
+    {
+        this.hoverBackgroundColor = hoverBackgroundColor;
+    }
+
+    public Color getPressedBackgroundColor()
+    {
+        return pressedBackgroundColor;
+    }
+
+    public void setPressedBackgroundColor(Color pressedBackgroundColor)
+    {
+        this.pressedBackgroundColor = pressedBackgroundColor;
     }
 }

@@ -8,7 +8,7 @@ import java.sql.*;
 /**
  * A server which implements multithreading, runs indefinitely
  */
-class ClientHandler implements Runnable
+class ClientHandler implements Runnable, Serializable
 {
     Socket socket = null; // server socket that will be interacting with client
     ObjectInputStream instream = null;
@@ -20,7 +20,6 @@ class ClientHandler implements Runnable
 
     public ClientHandler(Socket s)
     {
-        System.out.println("herer");
         try
         {
             this.socket = s;
@@ -148,9 +147,12 @@ class ClientHandler implements Runnable
         AllItems stock = admin.getStock();
         stock.updateQty(name, -qty);
         admin.setStock(stock);
-        shops.get(shop_id).addItem(it);
+        System.out.println("check 7 " + shop_id);
+        System.out.println(shops.get(shop_id - 1).getId());
+        shops.get(shop_id - 1).addItem(it);
         db.updateAdminItem(it.getId(), -it.getQty());
         db.addItem(shop_id, it);
+        System.out.println("check done");
     }
 
     void shopMadeBills()
@@ -253,6 +255,7 @@ class ClientHandler implements Runnable
             adminReadReq(); // done
         } else if (type.equals("16"))
         {
+            System.out.println("check 6");
             adminServeReq();// done
         } else if (type.equals("21"))
         {
@@ -323,7 +326,7 @@ class ClientHandler implements Runnable
                 String username = allUsers.getString(2);
                 String pass = allUsers.getString(3);
                 System.out.println(username);
-                Shop s = new Shop(username, pass, id);
+                Shop s = new Shop(username, pass);
                 shops.add(s);
             }
             allUsers.close();

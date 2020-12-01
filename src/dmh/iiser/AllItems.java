@@ -6,6 +6,7 @@ import java.util.ArrayList;
 // This class contains list of all items belonging to any shop or warehouse
 public class AllItems implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private ArrayList<Item> items;
     private int item_count;
 
@@ -18,7 +19,9 @@ public class AllItems implements Serializable
 
     public AllItems(AllItems allItems)
     {
-        this.items = new ArrayList<>(allItems.items);
+        this.items = new ArrayList<>();
+        if (allItems.items != null)
+            this.items = allItems.items;
         this.item_count = allItems.item_count;
     }
 
@@ -76,7 +79,7 @@ public class AllItems implements Serializable
         return -1;
     }
 
-    private String[][] getDataString()
+    public String[][] getDataString()
     {
         //Returns data in string format to be used in tables
         String[][] data = new String[item_count][5];
@@ -101,35 +104,103 @@ public class AllItems implements Serializable
         return getItemIdx(id) != -1;
     }
 
-    // TODO: define all these functions below, USE THE ABOVE HELPER FUNCTIONS
-    public void changeCostp(int id, int n_cost)
+    public int isQty(String name, int qty)
+    {
+
+        if (isPresent(name))
+        {
+            return Math.min(getItem(name).getQty(), qty);
+        }
+        return -1;
+    }
+
+    public Item changeCostp(int id, int n_cost)
     {
         // Change cost price to n_cost of item with item_id = id
+        int idx = getItemIdx(id);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setCostp(n_cost);
+
+        return it;
     }
 
-    public void changeCostp(String name, int n_cost)
+    public Item changeCostp(String name, int n_cost)
     {
-        // Change cost price to n_cost of item with name = name
+        int idx = getItemIdx(name);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setCostp(n_cost);
+
+        return it;
     }
 
-    public void changeSellp(int id, int n_sell)
+    public Item changeSellp(int id, int n_sell)
     {
-        // Change sell price to n_sell of item with item_id = id
+        int idx = getItemIdx(id);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setSellp(n_sell);
+
+        return it;
     }
 
-    public void changeSellp(String name, int n_sell)
+    public Item changeSellp(String name, int n_sell)
     {
-        // Change sell price to n_sell of item with name = name
+        int idx = getItemIdx(name);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setSellp(n_sell);
+
+        return it;
     }
 
-    public void updateQty(int id, int delta)
+    public Item updateQty(int id, int delta)
     {
-        // Update qty in dmh.iiser.Item by delta object with item_id = id
+        int idx = getItemIdx(id);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setQty(it.getQty() + delta);
+
+        return it;
     }
 
-    public void updateQty(String name, int delta)
+    public Item updateQty(String name, int delta)
     {
-        // Update qty in dmh.iiser.Item by delta object with name = name
+        int idx = getItemIdx(name);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setQty(it.getQty() + delta);
+
+        return it;
+    }
+
+    public Item changeQty(int id, int n_qty)
+    {
+        int idx = getItemIdx(id);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setQty(n_qty);
+
+        return it;
+    }
+
+    public Item changeQty(String name, int n_qty)
+    {
+        int idx = getItemIdx(name);
+
+        Item it = items.get(idx);
+        if (it != null)
+            it.setQty(n_qty);
+
+        return it;
     }
 
 }

@@ -1,9 +1,12 @@
 package dmh.iiser;
 
+import java.io.Serializable;
+
 //dmh.iiser.Request made by shop to the warehouse in form of dmh.iiser.Request object
-public class Request
+public class Request implements Serializable
 {
-    private int shop_id; // shop id of the shop requesting dmh.iiser.Item with name item_name
+    private static final long serialVersionUID = 1L;
+    private int shop_id; // shop id of the shop requesting Item with name item_name
     private String item_name;
     private int qty;
 

@@ -4,6 +4,8 @@ package dmh.iiser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -23,77 +25,107 @@ public class Main
     MyFrame main_frame;
     MyFrame login_frame, signup_frame;
 
-    MyTextField uname_textfield;
+    JTextField uname_textfield;
     JPasswordField pass_textfield;
 
     public void login()
     {
         login_frame = new MyFrame(main_frame.getX(), main_frame.getY());
+        int wd = login_frame.getWidth(), ht = login_frame.getHeight();
 
         JLabel login_label = new JLabel("LOGIN");
+        JSeparator login_label_separator = new JSeparator();
         login_frame.add_to_left(login_label);
-        login_label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-        login_label.setBounds(15, 15, 100, 35);
+        login_frame.add_to_left(login_label_separator);
+        login_label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+        login_label.setBounds(15, 15, 170, 35);
+        login_label.setForeground(new Color(220, 220, 220));
+        login_label_separator.setBounds(15, 50, 170, 3);
 
+        JLabel uname_label = new JLabel("USERNAME");
+        JLabel pass_label = new JLabel("PASSWORD");
+        JSeparator name_separator = new JSeparator();
+        JSeparator pass_separator = new JSeparator();
 
-        MyLabel uname_label = new MyLabel("USERNAME");
-        MyLabel pass_label = new MyLabel("PASSWORD");
-
-        uname_textfield = new MyTextField("");
+        uname_textfield = new JTextField("");
         pass_textfield = new JPasswordField("");
         login_submit_btn = new MyButton("SUBMIT");
 
-        login_frame.add_to_right(uname_textfield);
-        login_frame.add_to_right(pass_textfield);
-        login_frame.add_to_right(uname_label);
-        login_frame.add_to_right(pass_label);
-        login_frame.add_to_right(login_submit_btn);
-        uname_label.setBounds(170, 180, 70, 20);
-        pass_label.setBounds(170, 230, 70, 20);
-        uname_textfield.setBounds(170, 200, 200, 30);
-        pass_textfield.setBounds(170, 250, 200, 30);
-        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        login_frame.add(uname_label);
+        login_frame.add(uname_textfield);
+        login_frame.add(name_separator);
+        login_frame.add(pass_label);
+        login_frame.add(pass_textfield);
+        login_frame.add(pass_separator);
+        login_frame.add(login_submit_btn);
 
-        login_submit_btn.setBounds(210, 300, 90, 30);
-        login_submit_btn.addMouseListener(new LoginSubmit());
+        uname_label.setBounds(wd / 3 + 100, ht / 3 - 20, 200, 20);
+        uname_textfield.setBounds(wd / 3 + 100, ht / 3, 200, 25);
+        name_separator.setBounds(wd / 3 + 100, ht / 3 + 25, 200, 3);
+        pass_label.setBounds(wd / 3 + 100, ht / 3 + 30, 200, 20);
+        pass_textfield.setBounds(wd / 3 + 100, ht / 3 + 50, 200, 25);
+        pass_separator.setBounds(wd / 3 + 100, ht / 3 + 75, 200, 3);
+        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        uname_textfield.setOpaque(false);
+        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        pass_textfield.setOpaque(false);
+
+        login_submit_btn.setOpaque(false);
+        login_submit_btn.setBackground(new Color(91, 91, 91));
+        login_submit_btn.setBounds(wd / 3 + 100, 5 * ht / 8 - 15, 200, 30);
+        login_submit_btn.addActionListener(new LoginSubmit());
+
         login_frame.initialize();
         login_frame.setVisible(true);
-        // When user selects to login, create frame and handle here
-        // Use helper function in User class - USE IT
     }
 
     public void register()
     {
         signup_frame = new MyFrame(main_frame.getX(), main_frame.getY());
+        int wd = signup_frame.getWidth(), ht = signup_frame.getHeight();
 
-        JLabel login_label = new JLabel("LOGIN");
-        signup_frame.add_to_left(login_label);
-        login_label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-        login_label.setBounds(15, 15, 100, 35);
+        JLabel signup_label = new JLabel("REGISTER");
+        JSeparator signup_label_separator = new JSeparator();
+        signup_frame.add_to_left(signup_label);
+        signup_frame.add_to_left(signup_label_separator);
+        signup_label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+        signup_label.setBounds(15, 15, 100, 35);
+        signup_label.setForeground(new Color(220, 220, 220));
+        signup_label_separator.setBounds(15, 50, 170, 3);
 
+        JLabel uname_label = new JLabel("USERNAME");
+        JLabel pass_label = new JLabel("PASSWORD");
+        JSeparator name_separator = new JSeparator();
+        JSeparator pass_separator = new JSeparator();
 
-        MyLabel uname_label = new MyLabel("USERNAME");
-        MyLabel pass_label = new MyLabel("PASSWORD");
-
-        uname_textfield = new MyTextField("");
+        uname_textfield = new JTextField("");
         pass_textfield = new JPasswordField("");
         reg_submit_btn = new MyButton("SUBMIT");
 
-        signup_frame.add_to_right(uname_textfield);
-        signup_frame.add_to_right(pass_textfield);
-        signup_frame.add_to_right(uname_label);
-        signup_frame.add_to_right(pass_label);
-        signup_frame.add_to_right(reg_submit_btn);
-        uname_label.setBounds(170, 180, 70, 20);
-        pass_label.setBounds(170, 230, 70, 20);
-        uname_textfield.setBounds(170, 200, 200, 30);
-        pass_textfield.setBounds(170, 250, 200, 30);
-        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        signup_frame.add(uname_label);
+        signup_frame.add(uname_textfield);
+        signup_frame.add(name_separator);
+        signup_frame.add(pass_label);
+        signup_frame.add(pass_textfield);
+        signup_frame.add(pass_separator);
+        signup_frame.add(reg_submit_btn);
 
-        reg_submit_btn.setBounds(210, 300, 90, 30);
-        reg_submit_btn.addMouseListener(new RegSubmit());
+        uname_label.setBounds(wd / 3 + 100, ht / 3 - 20, 200, 20);
+        uname_textfield.setBounds(wd / 3 + 100, ht / 3, 200, 25);
+        name_separator.setBounds(wd / 3 + 100, ht / 3 + 25, 200, 3);
+        pass_label.setBounds(wd / 3 + 100, ht / 3 + 30, 200, 20);
+        pass_textfield.setBounds(wd / 3 + 100, ht / 3 + 50, 200, 25);
+        pass_separator.setBounds(wd / 3 + 100, ht / 3 + 75, 200, 3);
+        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        uname_textfield.setOpaque(false);
+        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        pass_textfield.setOpaque(false);
+
+        reg_submit_btn.setOpaque(false);
+        reg_submit_btn.setBackground(new Color(91, 91, 91));
+        reg_submit_btn.setBounds(wd / 3 + 100, 5 * ht / 8 - 15, 200, 30);
+        reg_submit_btn.addActionListener(new LoginSubmit());
+
         signup_frame.initialize();
         signup_frame.setVisible(true);
     }
@@ -104,87 +136,40 @@ public class Main
 
         login_btn = new MyButton("Login");
         reg_btn = new MyButton("Register");
-        main_frame.add_to_right(login_btn);
-        main_frame.add_to_right(reg_btn);
-        login_btn.setBounds(225, 205, 100, 40);
-        reg_btn.setBounds(225, 255, 100, 40);
-        login_btn.addMouseListener(new LoginAction());
-        reg_btn.addMouseListener(new RegAction());
+        main_frame.add(login_btn);
+        main_frame.add(reg_btn);
+        login_btn.setBounds(7 * main_frame.getWidth() / 12, main_frame.getHeight() / 3, 100, 30);
+        reg_btn.setBounds(7 * main_frame.getWidth() / 12, main_frame.getHeight() / 3 + 40, 100, 30);
+        login_btn.addActionListener(new LoginAction());
+        reg_btn.addActionListener(new RegAction());
 
         main_frame.initialize();
         main_frame.setVisible(true);
     }
 
-    public class LoginAction implements MouseListener
+    public class LoginAction implements ActionListener
     {
         @Override
-        public void mouseClicked(MouseEvent e)
+        public void actionPerformed(ActionEvent e)
         {
             login();
         }
-
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-
-        }
     }
 
-    public class RegAction implements MouseListener
+    public class RegAction implements ActionListener
     {
         @Override
-        public void mouseClicked(MouseEvent e)
+        public void actionPerformed(ActionEvent e)
         {
             register();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-
+            System.out.println("clicked reg");
         }
     }
 
-    public class LoginSubmit implements MouseListener
+    public class LoginSubmit implements ActionListener
     {
         @Override
-        public void mouseClicked(MouseEvent e)
+        public void actionPerformed(ActionEvent e)
         {
             String name = uname_textfield.getText();
             String pass = pass_textfield.getText();
@@ -196,6 +181,8 @@ public class Main
 
             if (valid.equals("f"))
             {
+                // TODO: add pop up for invalid credentials
+
                 c.socket_read();
                 c.close();
                 loggedIn = false;
@@ -205,10 +192,12 @@ public class Main
             {
                 type = 0;
                 admin.setReq(c.socket_read());
-                admin.setStock(c.socket_read());
+                AllItems it = c.socket_read();
+                if (it != null)
+                    admin.setStock(it);
                 c.socket_read();
                 c.close();
-
+                login_frame.dispose();
                 admin.menu(login_frame.getX(), login_frame.getY());
                 loggedIn = true;
                 return;
@@ -221,40 +210,17 @@ public class Main
             shop.setBills(c.socket_read());
             c.socket_read();
             c.close();
+            login_frame.dispose();
             shop.menu(login_frame.getX(), login_frame.getY());
             loggedIn = true;
-            login_frame.dispose();
         }
 
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-
-        }
     }
 
-    public class RegSubmit implements MouseListener
+    public class RegSubmit implements ActionListener
     {
         @Override
-        public void mouseClicked(MouseEvent e)
+        public void actionPerformed(ActionEvent e)
         {
             String name = uname_textfield.getText();
             String pass = pass_textfield.getText();
@@ -266,6 +232,7 @@ public class Main
             String valid = c.socket_read();
             if (valid.equals("f"))
             {
+                // TODO: add pop up for existing account
                 c.socket_read();
                 c.close();
                 loggedIn = false;
@@ -283,35 +250,11 @@ public class Main
             c.socket_read();
             c.close();
 
+            signup_frame.dispose();
             shop.menu(signup_frame.getX(), signup_frame.getY());
             loggedIn = true;
-            signup_frame.dispose();
-
         }
 
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-
-        }
     }
 
     public static void main(String[] args)

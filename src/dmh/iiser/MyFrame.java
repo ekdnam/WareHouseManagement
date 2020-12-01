@@ -23,13 +23,12 @@ public class MyFrame extends JFrame implements MouseListener
     int in_y = -1, f_y = -1;
 
     private JPanel left_panel;
-    private JPanel right_panel;
     private JLabel close_label;
-
+    private JTextArea project_dets;
 
     MyFrame(int px, int py)
     {
-        this(px, py, 800, 500);
+        this(px, py, 600, 400);
     }
 
     public MyFrame(int x1, int y1, int win_width1, int ht1)
@@ -54,45 +53,39 @@ public class MyFrame extends JFrame implements MouseListener
         left_panel.add(c);
     }
 
-    public void add_to_right(Component c)
-    {
-        right_panel.add(c);
-    }
 
     public void initialize()
     {
         getContentPane().add(left_panel);
-        getContentPane().add(right_panel);
-
     }
 
     private void initComponents()
     {
         left_panel = new javax.swing.JPanel();
-        right_panel = new javax.swing.JPanel();
         close_label = new javax.swing.JLabel();
+        project_dets = new JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-//        setSize(new java.awt.Dimension(800, 500));
         setLayout(null);
 
         left_panel.setBackground(new java.awt.Color(100, 100, 100));
         left_panel.setAlignmentX(0.0F);
         left_panel.setAlignmentY(0.0F);
         left_panel.setLayout(null);
-        left_panel.setBounds(0, 0, 250, 500);
-
-        right_panel.setAlignmentX(0.0F);
-        right_panel.setAlignmentY(0.0F);
-        right_panel.setLayout(null);
-
+        left_panel.setBounds(0, 0, 200, 400);
+        left_panel.add(project_dets);
+//        project_dets.setRows(5);
+//        project_dets.setFont(new java.awt.Font("Courier New", 2, 12));
+//        project_dets.setText("Warehouse Management System\nProject done by \n31355 - Mufaddal Diwan\n31352 - Aditya Mandke");
+//        project_dets.setBounds(0, 340, 200, 60);
+//        project_dets.setBorder(BorderFactory.createEmptyBorder());
+//        project_dets.setOpaque(false);
+//        project_dets.setForeground(new Color(0, 0, 0));
         close_label.setForeground(new java.awt.Color(100, 100, 100));
         close_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         close_label.setText("X");
-        right_panel.add(close_label);
-        close_label.setBounds(530, 0, 20, 20);
-        right_panel.setBounds(250, 0, 550, 500);
-
+        close_label.setBounds(win_width - 15, 5, 10, 10);
+        add(close_label);
     }
 
     @Override
@@ -151,30 +144,30 @@ public class MyFrame extends JFrame implements MouseListener
     {
         MyFrame login_frame = new MyFrame();
 
-        JLabel login_label = new JLabel("LOGIN");
-        login_frame.add_to_left(login_label);
-        login_label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-        login_label.setBounds(15, 15, 100, 35);
-
-
-        MyTextField uname_textfield;
-        JPasswordField pass_textfield;
-
-        MyLabel uname_label = new MyLabel("USERNAME");
-        MyLabel pass_label = new MyLabel("PASSWORD");
-
-        uname_textfield = new MyTextField("");
-        pass_textfield = new JPasswordField("");
-        login_frame.add_to_right(uname_textfield);
-        login_frame.add_to_right(pass_textfield);
-        login_frame.add_to_right(uname_label);
-        login_frame.add_to_right(pass_label);
-        uname_label.setBounds(170, 180, 70, 20);
-        pass_label.setBounds(170, 230, 70, 20);
-        uname_textfield.setBounds(170, 200, 200, 30);
-        pass_textfield.setBounds(170, 250, 200, 30);
-        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//        JLabel login_label = new JLabel("LOGIN");
+//        login_frame.add_to_left(login_label);
+//        login_label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+//        login_label.setBounds(15, 15, 100, 35);
+//
+//
+//        MyTextField uname_textfield;
+//        JPasswordField pass_textfield;
+//
+//        MyLabel uname_label = new MyLabel("USERNAME");
+//        MyLabel pass_label = new MyLabel("PASSWORD");
+//
+//        uname_textfield = new MyTextField("");
+//        pass_textfield = new JPasswordField("");
+//        login_frame.add_to_right(uname_textfield);
+//        login_frame.add_to_right(pass_textfield);
+//        login_frame.add_to_right(uname_label);
+//        login_frame.add_to_right(pass_label);
+//        uname_label.setBounds(170, 180, 70, 20);
+//        pass_label.setBounds(170, 230, 70, 20);
+//        uname_textfield.setBounds(170, 200, 200, 30);
+//        pass_textfield.setBounds(170, 250, 200, 30);
+//        uname_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//        pass_textfield.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         login_frame.initialize();
         login_frame.setVisible(true);
 
