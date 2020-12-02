@@ -32,12 +32,13 @@ public class Shop extends User
     JScrollPane allBillsDetails, singleBillDetails = null;
     JLabel billnoLabel;
     JTextField billNoInp;
+    JSeparator bill_no_separator;
     MyButton detailBtn;
 
     JLabel reqItNameLabel, reqItQtyLabel;
     JTextField reqItName, reqItQty;
     MyButton reqButton;
-
+    JSeparator req_it_name_separator, req_it_qty_separator;
 
     // Constructors
     // Use this constructor only when signing up and success
@@ -45,6 +46,7 @@ public class Shop extends User
     {
         super(uname, pass);
         stock = new AllItems();
+        bills = new ArrayList<>();
         id = Utilities.SHOP_CTR;
         Utilities.SHOP_CTR++;
     }
@@ -53,6 +55,8 @@ public class Shop extends User
     {
         super(uname, pass);
         this.id = id;
+        bills = new ArrayList<>();
+        stock = new AllItems();
     }
 
     // Use this for other purposes like moving the Shop object here and there
@@ -121,7 +125,7 @@ public class Shop extends User
         int off_y = 25;
         clearBtn = new MyButton("Clear");
         clearBtn.setBounds(wd - 100, ht - 60, 90, 20);
-//TODO:        clearBtn.addActionListener(new ClearBillAction());
+        clearBtn.addActionListener(new ClearBillAction());
         addItemBtn = new MyButton("Add Item");
         billingItNameLabel = new JLabel("Item Name");
         billingItQtyLabel = new JLabel("Qty");
@@ -146,10 +150,10 @@ public class Shop extends User
         shopFrame.add(nItem.name_sep);
 
         addItemBtn.setBounds(off_x + 210, off_y, 100, 20);
-//TODO:        addItemBtn.addActionListener(new AddBillItemAction());
+        addItemBtn.addActionListener(new AddBillItemAction());
         makeBillBtn = new MyButton("GenerateBill");
         makeBillBtn.setBounds(off_x + 105, off_y + 35, 145, 20);
-//TODO:        makeBillBtn.addActionListener(new GenerateBillAction());
+        makeBillBtn.addActionListener(new GenerateBillAction());
         shopFrame.add(addItemBtn);
         shopFrame.add(makeBillBtn);
         shopFrame.add(clearBtn);
@@ -157,34 +161,207 @@ public class Shop extends User
 
     public void requestItemF(int wd)
     {
+        allDetailsF(wd);
+        int off_x = wd / 3 + 10;
+        int off_y = 29 + Math.min(10, tablelen) * 19;
 
+        reqItNameLabel = new JLabel("Item Name");
+        off_y += 30;
+        reqItNameLabel.setBounds(off_x, off_y, 150, 20);
+        off_y += 20;
+        reqItName = new JTextField();
+        req_it_name_separator = new JSeparator();
+        reqItName.setBounds(off_x, off_y, 150, 20);
+        reqItName.setOpaque(false);
+        reqItName.setBorder(BorderFactory.createEmptyBorder());
+        req_it_name_separator.setBounds(off_x, off_y + 20, 150, 3);
+        off_y += 25;
+        reqItQtyLabel = new JLabel("Quantity");
+        reqItQtyLabel.setBounds(off_x, off_y, 150, 20);
+        off_y += 20;
+        reqItQty = new JTextField();
+        req_it_qty_separator = new JSeparator();
+        reqItQty.setBounds(off_x, off_y, 150, 20);
+        reqItQty.setOpaque(false);
+        reqItQty.setBorder(BorderFactory.createEmptyBorder());
+        req_it_qty_separator.setBounds(off_x, off_y + 20, 150, 3);
+        off_y += 30;
+        reqButton = new MyButton("Request");
+        reqButton.setBounds(off_x + 50, off_y, 100, 20);
+        reqButton.addActionListener(new RequestAction());
+        // reqButton.set
+        shopFrame.add(allDetailsTable);
+        shopFrame.add(reqItNameLabel);
+        shopFrame.add(reqItName);
+        shopFrame.add(req_it_name_separator);
+        shopFrame.add(reqItQtyLabel);
+        shopFrame.add(reqItQty);
+        shopFrame.add(req_it_qty_separator);
+        shopFrame.add(reqButton);
     }
-
 
     public void setupDetailsF()
     {
-        // New Frame opens with options of different details
+        Client c = new Client(Utilities.IP, Utilities.PORT);
+        c.socket_write("22");
+        c.socket_write(getId());
+        stock = c.socket_read();
+        bills = c.socket_read();
+        c.socket_read();
+        c.close();
+        detailsFrame = new MyFrame(shopFrame.getX(), shopFrame.getY());
+        JLabel detailFrameLabel = new JLabel("Details");
+        JSeparator detail_separator = new JSeparator();
+        detailFrameLabel.setBounds(15, 15, 100, 35);
+        detail_separator.setBounds(15, 50, 170, 3);
+        detailFrameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+        detailFrameLabel.setForeground(new Color(220, 220, 220));
+
+        int y_off = 30;
+        int p_y = 80;
+
+        detailsBtns = new MyButton[2];
+        detailsBtns[0] = new MyButton("Display Items");
+        detailsBtns[1] = new MyButton("Display Bills");
+
+        for (int i = 0; i < 2; i++)
+        {
+            Color textColor = new Color(200, 200, 200);
+            detailsBtns[i].setBounds(0, p_y, 200, 30);
+            detailsBtns[i].addActionListener(new DetailsMenuAction());
+            // detailsBtns[i].set
+            p_y += y_off;
+            detailsFrame.add(detailsBtns[i]);
+        }
+
+        detailsFrame.add_to_left(detailFrameLabel);
+        detailsFrame.add_to_left(detail_separator);
+        int wd = detailsFrame.getWidth();
+        allBillsF(wd);
+        allDetailsF(wd);
+        detailsFrame.add(allDetailsTable);
+        setDetailsVisFalse();
+        detailsFrame.initialize();
+        detailsFrame.setVisible(true);
     }
 
-    public void displayStockF()
+    public void allDetailsF(int wd)
     {
-        // Handle frame GUI for displaying stock in this shop
+        Client c = new Client(Utilities.IP, Utilities.PORT);
+        c.socket_write("22");
+        c.socket_write(id);
+        stock = c.socket_read();
+        bills = c.socket_read();
+        c.socket_read();
+        c.close();
+
+        String[] cols = {"Id", "Name", "Cost", "Sell", "Qty"};
+        String[][] data = stock.getDataString();
+
+        MyTable table = new MyTable(data, cols);
+
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(1).setPreferredWidth(150);
+        table.getColumnModel().getColumn(2).setPreferredWidth(60);
+        table.getColumnModel().getColumn(3).setPreferredWidth(60);
+        table.getColumnModel().getColumn(4).setPreferredWidth(50);
+
+        table.align(5);
+        tablelen = data.length;
+        allDetailsTable = new JScrollPane(table);
+        allDetailsTable.setBounds(wd / 3 + 10, 30, 2 * wd / 3 - 15, 19 + Math.min(10, data.length) * 19);
+        allDetailsTable.setBorder(BorderFactory.createEmptyBorder());
+        allDetailsTable.setOpaque(false);
     }
 
-    public void billsDisplayF()
+    void allBillsF(int wd)
     {
-        // Handle all bills display here
-        // Use helper functions from Bill class
-        // Display a particular bill on user choice call billDispayF()
+        Client c = new Client(Utilities.IP, Utilities.PORT);
+        c.socket_write("22");
+        c.socket_write(id);
+        stock = c.socket_read();
+        bills = c.socket_read();
+        c.socket_read();
+        c.close();
+
+        String[] cols = {"Bill No", "Date", "Total"};
+        String[][] data = new String[bills.size()][3];
+        int i = 0;
+        for (Bill b : bills)
+        {
+            data[i] = b.getDataString();
+            i++;
+        }
+        MyTable table = new MyTable(data, cols);
+
+        table.align(3);
+
+        allBillsDetails = new JScrollPane(table);
+        billlen = data.length;
+
+        int off_x = wd / 3 + 10;
+        int off_y = 29 + Math.min(8, billlen) * 19;
+        allBillsDetails.setBounds(off_x, 20, 2 * wd / 3 - 15, off_y);
+        allBillsDetails.setBorder(BorderFactory.createEmptyBorder());
+        allBillsDetails.setOpaque(false);
+        off_y += 30;
+        billnoLabel = new JLabel("Bill No");
+        billnoLabel.setBounds(off_x, off_y, 200, 20);
+        billNoInp = new JTextField();
+        bill_no_separator = new JSeparator();
+        billNoInp.setOpaque(false);
+        billNoInp.setBorder(BorderFactory.createEmptyBorder());
+        billNoInp.setBounds(off_x + 80, off_y, 70, 20);
+        bill_no_separator.setBounds(off_x + 80, off_y + 20, 70, 3);
+        detailBtn = new MyButton("View");
+        detailBtn.setBounds(off_x + 160, off_y, 70, 20);
+
+        detailBtn.addActionListener(new BillDetailAction());
+
+        detailsFrame.add(billnoLabel);
+        detailsFrame.add(billNoInp);
+        detailsFrame.add(bill_no_separator);
+        detailsFrame.add(detailBtn);
+        detailsFrame.add(allBillsDetails);
     }
 
-    public void billDisplayF()
+    void billDispF(int billno)
     {
-        // Handle display of items in a single bill here
+        boolean flag = true;
+        Bill b = null;
+
+        for (Bill bill : bills)
+        {
+            if (bill.getBillNo() == billno)
+            {
+                b = bill;
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+            return;
+        int wd = detailsFrame.getWidth();
+        int off_x = wd / 3 + 10;
+        int off_y = 88 + Math.min(8, billlen) * 18;
+        int tsize;
+        String[] cols = {"No.", "Item Name", "Price", "Qty"};
+        String[][] data = b.getItemDataString();
+        tsize = 19 + Math.min(8, data.length) * 19;
+        MyTable table = new MyTable(data, cols);
+        table.align(4);
+        singleBillDetails = new JScrollPane(table);
+        singleBillDetails.setBounds(off_x, off_y, 2 * wd / 3 - 15, tsize);
+
+        detailsFrame.add(singleBillDetails);
     }
 
     void setAllVisFalse()
     {
+        for (BillItem i : billitems)
+        {
+            i.setVisible(false);
+        }
         billitems.clear();
         clearBtn.setVisible(false);
         makeBillBtn.setVisible(false);
@@ -192,19 +369,36 @@ public class Shop extends User
         billingItNameLabel.setVisible(false);
         billingItQtyLabel.setVisible(false);
         nItem.setVisible(false);
-//
-//        allDetailsTable.setVisible(false);
-//
-//        reqItNameLabel.setVisible(false);
-//        reqItName.setVisible(false);
-//        reqItQtyLabel.setVisible(false);
-//        reqItQty.setVisible(false);
-//        reqButton.setVisible(false);
 
-        for (int i = 0; i < btns.length; i++)
+        allDetailsTable.setVisible(false);
+
+        reqItNameLabel.setVisible(false);
+        reqItName.setVisible(false);
+        req_it_name_separator.setVisible(false);
+        reqItQtyLabel.setVisible(false);
+        reqItQty.setVisible(false);
+        req_it_qty_separator.setVisible(false);
+        reqButton.setVisible(false);
+
+        for (MyButton btn : btns)
         {
-            btns[i].setBackground(MyButton.DEFAULT_BG_COLOR);
+            btn.setBackground(MyButton.DEFAULT_BG_COLOR);
         }
+    }
+
+    void setDetailsVisFalse()
+    {
+        for (int i = 0; i < 2; i++)
+            detailsBtns[i].setBackground(MyButton.DEFAULT_BG_COLOR);
+        allDetailsTable.setVisible(false);
+//
+        billnoLabel.setVisible(false);
+        billNoInp.setVisible(false);
+        bill_no_separator.setVisible(false);
+        detailBtn.setVisible(false);
+        allBillsDetails.setVisible(false);
+        if (singleBillDetails != null)
+            singleBillDetails.setVisible(false);
     }
 
     public class ShopMenuAction implements ActionListener
@@ -225,7 +419,7 @@ public class Shop extends User
                 setAllVisFalse();
                 setupDetailsF();
                 btns[1].setBackground(MyButton.DEFAULT_SELECTED_BG_COLOR);
-//                detailsFrame.repaint();
+                detailsFrame.repaint();
             } else if (e.getSource() == btns[2])
             {
                 setAllVisFalse();
@@ -236,6 +430,196 @@ public class Shop extends User
         }
     }
 
+    public class DetailsMenuAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getSource() == detailsBtns[0])
+            {
+                setDetailsVisFalse();
+                detailsBtns[0].setBackground(MyButton.DEFAULT_SELECTED_BG_COLOR);
+                allDetailsTable.setVisible(true);
+                detailsFrame.repaint();
+            } else if (e.getSource() == detailsBtns[1])
+            {
+                setDetailsVisFalse();
+                detailsBtns[1].setBackground(MyButton.DEFAULT_SELECTED_BG_COLOR);
+                allBillsF(detailsFrame.getWidth());
+                detailsFrame.repaint();
+            }
+        }
+    }
+
+    public class BillDetailAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            //TODO: bill in range
+            try
+            {
+                int bno = Integer.parseInt(billNoInp.getText());
+                if (singleBillDetails != null)
+                    detailsFrame.remove(singleBillDetails);
+                detailsFrame.repaint();
+                billDispF(bno);
+                detailsFrame.repaint();
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    class ClearBillAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            for (BillItem i : billitems)
+            {
+                shopFrame.remove(i.itName);
+                shopFrame.remove(i.itQty);
+                shopFrame.remove(i.name_sep);
+                shopFrame.remove(i.qty_sep);
+            }
+            int off_x = shopFrame.getWidth() / 3 + 10;
+            shopFrame.remove(nItem.itName);
+            shopFrame.remove(nItem.itQty);
+            shopFrame.remove(nItem.name_sep);
+            shopFrame.remove(nItem.qty_sep);
+            billitems.clear();
+            int off_y = 50;
+            nItem = new BillItem(off_x, off_y);
+            shopFrame.add(nItem.itName);
+            shopFrame.add(nItem.itQty);
+            shopFrame.add(nItem.name_sep);
+            shopFrame.add(nItem.qty_sep);
+            addItemBtn.setBounds(off_x + 210, off_y, 100, 20);
+            makeBillBtn.setBounds(off_x + 105, off_y + 35, 145, 20);
+            shopFrame.repaint();
+        }
+    }
+
+    class AddBillItemAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            boolean isvalid = true;
+            String name = "";
+            int qty = 0;
+            try
+            {
+                name = nItem.itName.getText();
+                qty = Integer.parseInt(nItem.itQty.getText());
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+                isvalid = false;
+            }
+            if (stock.isQty(name, qty) == -1)
+            {
+                isvalid = false;
+            }
+//            isvalid = true;
+            int off_x = shopFrame.getWidth() / 3 + 10;
+            if (isvalid)
+            {
+
+                billitems.add(nItem);
+                int off_y = 50 + billitems.size() * 25;
+                nItem = new BillItem(off_x, off_y);
+                shopFrame.add(nItem.itName);
+                shopFrame.add(nItem.itQty);
+                shopFrame.add(nItem.name_sep);
+                shopFrame.add(nItem.qty_sep);
+                shopFrame.repaint();
+                addItemBtn.setBounds(off_x + 210, off_y, 100, 20);
+                makeBillBtn.setBounds(off_x + 105, off_y + 35, 145, 20);
+            }
+        }
+    }
+
+    class GenerateBillAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            // logic
+            for (BillItem i : billitems)
+            {
+                shopFrame.remove(i.itName);
+                shopFrame.remove(i.itQty);
+                shopFrame.remove(i.name_sep);
+                shopFrame.remove(i.qty_sep);
+            }
+            //TODO : item not in stock pop up
+            int off_x = shopFrame.getWidth() / 3 + 10;
+            shopFrame.remove(nItem.itName);
+            shopFrame.remove(nItem.itQty);
+            shopFrame.remove(nItem.name_sep);
+            shopFrame.remove(nItem.qty_sep);
+            if (billitems.size() != 0)
+            {
+                Bill b = new Bill(date);
+                for (BillItem i : billitems)
+                {
+                    String name = i.itName.getText();
+                    int qty = Integer.parseInt(i.itQty.getText());
+                    Item it = new Item(stock.getItem(name));
+                    stock.updateQty(name, -Math.min(qty, stock.isQty(name, qty)));
+                    it.setQty(Math.min(qty, stock.isQty(name, qty)));
+                    b.addItem(it);
+                }
+                if (b.getTotal() != 0)
+                {
+                    bills.add(b);
+                    Client c = new Client(Utilities.IP, Utilities.PORT);
+                    c.socket_write("21");
+                    c.socket_write(id);
+                    c.socket_write(stock);
+                    c.socket_write(bills);
+                    c.socket_write(b);
+                    c.socket_read();
+                    c.close();
+                } else
+                {
+                    Utilities.BILL_CTR--;
+                }
+            }
+            billitems.clear();
+            int off_y = 50;
+            nItem = new BillItem(off_x, off_y);
+            shopFrame.add(nItem.itName);
+            shopFrame.add(nItem.itQty);
+            shopFrame.add(nItem.name_sep);
+            shopFrame.add(nItem.qty_sep);
+            addItemBtn.setBounds(off_x + 210, off_y, 100, 20);
+            makeBillBtn.setBounds(off_x + 105, off_y + 35, 145, 20);
+            shopFrame.repaint();
+        }
+    }
+
+    public class RequestAction implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            try
+            {
+                String name = reqItName.getText();
+                int qty = Integer.parseInt(reqItQty.getText());
+                Request r = new Request(getId(), name, qty);
+
+                Client c = new Client(Utilities.IP, Utilities.PORT);
+                c.socket_write("23");
+                c.socket_write(id);
+                c.socket_write(r);
+                c.close();
+                reqItName.setText("");
+                reqItQty.setText("");
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
 
     public void addItem(Item it)
     {

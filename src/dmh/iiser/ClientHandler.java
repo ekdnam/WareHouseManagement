@@ -172,7 +172,7 @@ class ClientHandler implements Runnable, Serializable
     void shopRetDets()
     {
         int id = socket_read();
-        Shop sh = shops.get(id);
+        Shop sh = shops.get(id - 1);
         socket_write(sh.getStock());
         socket_write(sh.getBills());
     }
@@ -219,60 +219,46 @@ class ClientHandler implements Runnable, Serializable
         switch (type)
         {
             case "login":
-
+                loginHandle(); // done
                 break;
             case "reg":
+                regHandle(); // done
                 break;
             case "11":
-
+                adminPutStock(); // done
                 break;
             case "12":
+                adminManipStock(); // done
                 break;
-
             case "13":
+                adminRetStock(); // done
+                break;
+            case "14":
+                adminWriteReq(); // done
+                break;
+            case "15":
+                adminReadReq(); // done
+                break;
+            case "16":
+                adminServeReq();// done
+                break;
+            case "21":
+                shopMadeBills(); // done
+                break;
+            case "22":
+                shopRetDets(); // done
+                break;
+            case "23":
+                shopReq(); // done
+                break;
+            case "25":
+                updateShopStock();
+                break;
+            case "00":
+                ctrSync();
                 break;
         }
-        if (type.equals("login"))
-        {
-            loginHandle(); // done
-        } else if (type.equals("reg"))
-        {
-            regHandle(); // done
-        } else if (type.equals("11"))
-        {
-            adminPutStock(); // done
-        } else if (type.equals("12"))
-        {
-            adminManipStock(); // done
-        } else if (type.equals("13"))
-        {
-            adminRetStock(); // done
-        } else if (type.equals("14"))
-        {
-            adminWriteReq(); // done
-        } else if (type.equals("15"))
-        {
-            adminReadReq(); // done
-        } else if (type.equals("16"))
-        {
-            System.out.println("check 6");
-            adminServeReq();// done
-        } else if (type.equals("21"))
-        {
-            shopMadeBills(); // done
-        } else if (type.equals("22"))
-        {
-            shopRetDets(); // done
-        } else if (type.equals("23"))
-        {
-            shopReq(); // done
-        } else if (type.equals("25"))
-        {
-            updateShopStock();
-        } else if (type.equals("00"))
-        {
-            ctrSync();
-        }
+
         socket_write("done");
         close();
     }
