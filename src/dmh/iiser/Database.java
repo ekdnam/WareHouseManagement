@@ -5,7 +5,7 @@ import java.sql.*;
 public class Database
 {
     Connection con;
-    String url = "jdbc:mysql://localhost:3306/SDL";
+    String url = "jdbc:mysql://localhost:3306/WAREHOUSE";
     String username = "root";
     String password = "abcd1234";
     Statement st;
@@ -78,7 +78,7 @@ public class Database
 
     ResultSet allUsers()
     {
-        return exQuery("select * from User order by id");
+        return exQuery("select * from Shop order by id");
     }
 
     ResultSet adminItems()
@@ -98,17 +98,17 @@ public class Database
 
     ResultSet billItems(int bill_no)
     {
-        return exQuery(String.format("select * from Bill where bill_no = %d", bill_no));
+        return exQuery(String.format("select * from BillItem where bill_no = %d", bill_no));
     }
 
     ResultSet getItems(int id)
     {
-        return exQuery(String.format("select * from ShopItem where id = %d", id));
+        return exQuery(String.format("select * from ShopItem where item_id = %d", id));
     }
 
     ResultSet getItem(int item_id, int shop_id)
     {
-        return exQuery(String.format("select * from ShopItem where id = %d and shop_id = %d", item_id, shop_id));
+        return exQuery(String.format("select * from ShopItem where item_id = %d and shop_id = %d", item_id, shop_id));
     }
 
     ResultSet getRequests()
@@ -118,19 +118,19 @@ public class Database
 
     int addUser(String username, String pass)
     {
-        return exQueryUpdate(String.format("insert into User(username, password) values('%s', '%s')", username, pass));
+        return exQueryUpdate(String.format("insert into Shop(username, password) values('%s', '%s')", username, pass));
     }
 
     int addAdminStock(Item it)
     {
         return exQueryUpdate(String.format(
-                "insert into AdminItem(id, name, costp, sellp, qty, type) values(%d, '%s',%d, %d, %d, '%s')",
-                it.getId(), it.getName(), it.getCostp(), it.getSellp(), it.getQty(), ""));
+                "insert into AdminItem(item_id, name, costp, sellp, qty) values(%d, '%s',%d, %d, %d)",
+                it.getId(), it.getName(), it.getCostp(), it.getSellp(), it.getQty()));
     }
 
     int changeAdminItem(Item it)
     {
-        String query = String.format("update AdminItem set costp = %d, sellp = %d, qty = %d where id = %d", it.getCostp(),
+        String query = String.format("update AdminItem set costp = %d, sellp = %d, qty = %d where item_id = %d", it.getCostp(),
                 it.getSellp(), it.getQty(), it.getId());
         return exQueryUpdate(query);
     }
@@ -141,7 +141,7 @@ public class Database
         exQueryUpdate(ins);
         for (Item it : b.getItems())
         {
-            String query = String.format("insert into Bill values(%d, %d, %d, %d)", b.getBillNo(), it.getId(), it.getSellp(),
+            String query = String.format("insert into BillItem values(%d, %d, %d, %d)", b.getBillNo(), it.getId(), it.getCostp(),
                     it.getQty());
             exQueryUpdate(query);
         }
@@ -149,7 +149,7 @@ public class Database
 
     int updateShopItem(int shop_id, int item_id, int qty)
     {
-        String query = String.format("update ShopItem set qty = qty + (%d) where shop_id = %d and id = %d", qty,
+        String query = String.format("update ShopItem set qty = qty + (%d) where shop_id = %d and item_id = %d", qty,
                 shop_id, item_id);
         return exQueryUpdate(query);
     }
@@ -173,7 +173,7 @@ public class Database
 
     int updateAdminItem(int id, int qty)
     {
-        String query = String.format("update AdminItem set qty = qty+(%d) where id = %d", qty, id);
+        String query = String.format("update AdminItem set qty = qty+(%d) where item_id = %d", qty, id);
         return exQueryUpdate(query);
     }
 
@@ -181,15 +181,15 @@ public class Database
     {
         try
         {
-            String find = String.format("select id from ShopItem where shop_id = %d and id = %d", shop_id, it.getId());
+            String find = String.format("select item_id from ShopItem where shop_id = %d and item_id = %d", shop_id, it.getId());
             ResultSet r = exQuery(find);
             if (r.next())
             {
                 updateShopItem(shop_id, it.getId(), it.getQty());
             } else
             {
-                String query = String.format("insert into ShopItem values(%d, %d, '%s', %d, %d, %d, '%s')", shop_id,
-                        it.getId(), it.getName(), it.getCostp(), it.getSellp(), it.getQty(), "");
+                String query = String.format("insert into ShopItem values(%d, %d, '%s', %d, %d, %d)", shop_id,
+                        it.getId(), it.getName(), it.getCostp(), it.getSellp(), it.getQty());
                 return exQueryUpdate(query);
             }
         } catch (Exception e)
@@ -207,8 +207,8 @@ public class Database
     int addRequest(Request r)
     {
         String query = String.format(
-                "insert into Requests(shop_id, item_name, qty, shopname) values(%d, '%s', %d, '%s')", r.getShopId(), r.getItemName(),
-                r.getQty(), "shopName");
+                "insert into Requests(shop_id, item_name, qty) values(%d, '%s', %d)", r.getShopId(), r.getItemName(),
+                r.getQty());
         return exQueryUpdate(query);
     }
 }

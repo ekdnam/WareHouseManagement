@@ -1,8 +1,9 @@
 package dmh.iiser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bill
+public class Bill implements Serializable
 {
     private int bill_no;
     private String date;
@@ -64,6 +65,7 @@ public class Bill
     public void addItem(Item it)
     {
         items.add(it);
+        total += (it.getQty() * it.getSellp());
     }
 
     // Getters and Setters

@@ -124,7 +124,7 @@ public class Main
         reg_submit_btn.setOpaque(false);
         reg_submit_btn.setBackground(new Color(91, 91, 91));
         reg_submit_btn.setBounds(wd / 3 + 100, 5 * ht / 8 - 15, 200, 30);
-        reg_submit_btn.addActionListener(new LoginSubmit());
+        reg_submit_btn.addActionListener(new RegSubmit());
 
         signup_frame.initialize();
         signup_frame.setVisible(true);
@@ -250,8 +250,9 @@ public class Main
             c.socket_read();
             c.close();
 
-            signup_frame.dispose();
             shop.menu(signup_frame.getX(), signup_frame.getY());
+            signup_frame.dispose();
+
             loggedIn = true;
         }
 

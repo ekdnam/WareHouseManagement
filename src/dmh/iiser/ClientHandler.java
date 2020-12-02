@@ -22,6 +22,7 @@ class ClientHandler implements Runnable, Serializable
     {
         try
         {
+//            shops.add(new Shop("", "", 0));
             this.socket = s;
             outstream = new ObjectOutputStream(socket.getOutputStream());
             instream = new ObjectInputStream(socket.getInputStream());
@@ -158,23 +159,35 @@ class ClientHandler implements Runnable, Serializable
     void shopMadeBills()
     {
         int id = socket_read();
-        Shop sh = shops.get(id);
-        sh.setStock(socket_read());
-        sh.setBills(socket_read());
-        Bill b = socket_read();
-        db.addBill(b, id);
-        for (Item it : b.getItems())
+        for (Shop sh : shops)
         {
-            db.updateShopItem(id, it.getId(), -it.getQty());
+            if (sh.getId() == id)
+            {
+                sh.setStock(socket_read());
+                sh.setBills(socket_read());
+                Bill b = socket_read();
+                db.addBill(b, id);
+                for (Item it : b.getItems())
+                {
+                    db.updateShopItem(id, it.getId(), -it.getQty());
+                }
+            }
         }
     }
 
     void shopRetDets()
     {
         int id = socket_read();
-        Shop sh = shops.get(id - 1);
-        socket_write(sh.getStock());
-        socket_write(sh.getBills());
+        System.out.println(id);
+        for (Shop sh : shops)
+        {
+            if (sh.getId() == id)
+            {
+                socket_write(sh.getStock());
+                socket_write(sh.getBills());
+            }
+        }
+
     }
 
     void shopReq()
@@ -334,7 +347,7 @@ class ClientHandler implements Runnable, Serializable
                 int costp = Integer.parseInt(aitem.getString(3));
                 int sellp = Integer.parseInt(aitem.getString(4));
                 int qty = Integer.parseInt(aitem.getString(5));
-                String type = aitem.getString(6);
+//                String type = aitem.getString(6);
                 Item it = new Item(id, name, costp, sellp, qty);
                 admin.addItem(it);
             }
@@ -358,7 +371,7 @@ class ClientHandler implements Runnable, Serializable
                 int costp = Integer.parseInt(sitem.getString(4));
                 int sellp = Integer.parseInt(sitem.getString(5));
                 int qty = Integer.parseInt(sitem.getString(6));
-                String type = sitem.getString(7);
+//                String type = sitem.getString(7);
                 Item it = new Item(id, name, costp, sellp, qty);
                 shop.addItem(it);
             }
@@ -386,10 +399,11 @@ class ClientHandler implements Runnable, Serializable
                 {
                     int item_id = Integer.parseInt(billItems.getString(2));
                     int qty = Integer.parseInt(billItems.getString(4));
+
                     ResultSet itres = db.getItems(item_id);
                     itres.next();
                     String name = itres.getString(3);
-                    int costp = Integer.parseInt(itres.getString(4));
+                    int costp = Integer.parseInt(billItems.getString(3));
                     int sellp = Integer.parseInt(itres.getString(5));
                     Item it = new Item(item_id, name, costp, sellp, qty);
                     b.addItem(it);
@@ -415,7 +429,6 @@ class ClientHandler implements Runnable, Serializable
                 int shop_id = Integer.parseInt(reqs.getString(2));
                 String item_name = reqs.getString(3);
                 int qty = Integer.parseInt(reqs.getString(4));
-                String shopname = reqs.getString(5);
 
                 Request r = new Request(shop_id, item_name, qty);
                 shopreqs.add(r);

@@ -73,6 +73,7 @@ public class Shop extends User
     public void menu(int x, int y)
     {
         Utilities.updateCtrs();
+        System.out.println(getId());
         shopFrame = new MyFrame(x, y);
         JLabel shoplabel = new JLabel(getName());
         JSeparator label_separator = new JSeparator();
@@ -249,7 +250,7 @@ public class Shop extends User
     {
         Client c = new Client(Utilities.IP, Utilities.PORT);
         c.socket_write("22");
-        c.socket_write(id);
+        c.socket_write(getId());
         stock = c.socket_read();
         bills = c.socket_read();
         c.socket_read();
@@ -352,7 +353,8 @@ public class Shop extends User
         table.align(4);
         singleBillDetails = new JScrollPane(table);
         singleBillDetails.setBounds(off_x, off_y, 2 * wd / 3 - 15, tsize);
-
+        singleBillDetails.setBorder(BorderFactory.createEmptyBorder());
+        singleBillDetails.setOpaque(false);
         detailsFrame.add(singleBillDetails);
     }
 
@@ -543,13 +545,6 @@ public class Shop extends User
         public void actionPerformed(ActionEvent e)
         {
             // logic
-            for (BillItem i : billitems)
-            {
-                shopFrame.remove(i.itName);
-                shopFrame.remove(i.itQty);
-                shopFrame.remove(i.name_sep);
-                shopFrame.remove(i.qty_sep);
-            }
             //TODO : item not in stock pop up
             int off_x = shopFrame.getWidth() / 3 + 10;
             shopFrame.remove(nItem.itName);
@@ -584,6 +579,13 @@ public class Shop extends User
                     Utilities.BILL_CTR--;
                 }
             }
+            for (BillItem i : billitems)
+            {
+                shopFrame.remove(i.itName);
+                shopFrame.remove(i.itQty);
+                shopFrame.remove(i.name_sep);
+                shopFrame.remove(i.qty_sep);
+            }
             billitems.clear();
             int off_y = 50;
             nItem = new BillItem(off_x, off_y);
@@ -609,8 +611,9 @@ public class Shop extends User
 
                 Client c = new Client(Utilities.IP, Utilities.PORT);
                 c.socket_write("23");
-                c.socket_write(id);
+                c.socket_write(getId());
                 c.socket_write(r);
+                System.out.println(getId());
                 c.close();
                 reqItName.setText("");
                 reqItQty.setText("");
