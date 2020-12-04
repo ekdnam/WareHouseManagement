@@ -69,7 +69,6 @@ public class Shop extends User
     }
 
     // Class methods
-    //TODO: implement the below methods (UI implementation here - leave it for the end)
     public void menu(int x, int y)
     {
         Utilities.updateCtrs();
@@ -341,7 +340,10 @@ public class Shop extends User
             }
         }
         if (flag)
+        {
+            new PopUp("Bill not found", detailsFrame.getX(), detailsFrame.getY()).setVisible(true);
             return;
+        }
         int wd = detailsFrame.getWidth();
         int off_x = wd / 3 + 10;
         int off_y = 88 + Math.min(8, billlen) * 18;
@@ -545,7 +547,8 @@ public class Shop extends User
         public void actionPerformed(ActionEvent e)
         {
             // logic
-            //TODO : item not in stock pop up
+            new PopUp("Item not in stock", shopFrame.getX(), shopFrame.getY()).setVisible(true);
+
             int off_x = shopFrame.getWidth() / 3 + 10;
             shopFrame.remove(nItem.itName);
             shopFrame.remove(nItem.itQty);

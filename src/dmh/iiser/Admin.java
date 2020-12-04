@@ -416,7 +416,7 @@ public class Admin extends User
                 System.out.println(name + ", " + cost + ", " + qty);
                 if (stock.isPresent(name))
                 {
-                    // TODO : POP UP ITEM EXISTS
+                    new PopUp("Item already in stock", adminFrame.getX(), adminFrame.getY()).setVisible(true);
                     return;
                 }
                 Utilities.updateCtrs();
@@ -445,7 +445,7 @@ public class Admin extends User
         {
             Item it = null;
 
-            //TODO : pop-up item doesn't exist
+            new PopUp("Item not in stock", adminFrame.getX(), adminFrame.getY()).setVisible(true);
             if (options.getSelectedItem().equals("Cost Price"))
             {
                 try
@@ -508,10 +508,12 @@ public class Admin extends User
                 req = c.socket_read();
                 c.socket_read();
                 c.close();
-                //TODO : count limit
+
                 int cnt = Integer.parseInt(serveCnt.getText());
                 if (cnt > req.size())
+                {
                     cnt = req.size();
+                }
                 for (int i = 0; i < cnt; i++)
                 {
                     Request r = req.remove();

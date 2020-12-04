@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.*;
 
-//TODO: make good looking table
 public class MyTable extends JTable
 {
 

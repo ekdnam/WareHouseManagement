@@ -11,9 +11,6 @@ import java.awt.event.MouseListener;
 
 public class Main
 {
-    //TODO: Database queries, reduce redundancy as verification is done in the program
-    //TODO: Database code commented, handle later
-    //TODO: These classes do not include details about UI, have to work on that after these are done
 
     private int type;
     private Admin admin;
@@ -181,7 +178,7 @@ public class Main
 
             if (valid.equals("f"))
             {
-                // TODO: add pop up for invalid credentials
+                new PopUp("Invalid Credentials", main_frame.getX(), main_frame.getY()).setVisible(true);
 
                 c.socket_read();
                 c.close();
@@ -232,7 +229,7 @@ public class Main
             String valid = c.socket_read();
             if (valid.equals("f"))
             {
-                // TODO: add pop up for existing account
+                new PopUp("User already exists", main_frame.getX(), main_frame.getY()).setVisible(true);
                 c.socket_read();
                 c.close();
                 loggedIn = false;
