@@ -174,8 +174,8 @@ public class Admin extends User
         options.addItem("Cost Price");
         options.addItem("Sell Price");
         options.addItem("Quantity");
-//        options.setBackground(new Color(220, 220, 220));
-//        options.setBorder(BorderFactory.createEmptyBorder());
+
+
         options.addActionListener(new ParameterSelectAction());
         int off_y = 60 + Math.min(10, tablelen) * 19;
         int off_x = wd / 3 + 10;

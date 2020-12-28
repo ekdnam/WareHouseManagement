@@ -5,9 +5,9 @@ import java.sql.*;
 public class Database
 {
     Connection con;
-    String url = "jdbc:mysql://localhost:3306/WAREHOUSE";
+    String url = "jdbc:mysql://localhost:3306/warehouse";
     String username = "root";
-    String password = "abcd1234";
+    String password = "mandke";
     Statement st;
 
     public Database()
